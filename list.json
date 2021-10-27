@@ -43,6 +43,12 @@ listJSON = `[
     },
     {
         "pos": 8,
+        "name": "a quickie",
+        "creator": "KrXyt",
+        "id": 75101483
+    },
+    {
+        "pos": 9,
         "name": "Quick Clicks",
         "creator": "TacoJed",
         "id": 75099616
