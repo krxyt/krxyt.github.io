@@ -7,10 +7,16 @@ with open('read_list/list.json', 'r') as read_file:
 
 new = [];
 
+recent_level = "Most Recent Change: ";
+
 def move_level(index, to):
 
 	to -= 1;
 	index -= 1;
+
+	global recent_level;
+	
+	recent_level += "Moved '" + data[index]['name'] + "' from " + str(data[index]['pos']) + " to " + str(data[to]['pos']);
 
 	if (index > to):
 		for x in data:
@@ -34,6 +40,9 @@ def move_level(index, to):
 		data.pop(index);
 
 def add_level(name, creator, id_, pos):
+	global recent_level;
+	recent_level += "Added '" + name + "' at " + str(pos);
+
 	counter = 0;
 	for x in data:
 		if (data[counter]['pos'] >= pos):
@@ -45,6 +54,9 @@ def add_level(name, creator, id_, pos):
 	data.insert(pos-1, temp);
 
 def remove_level(pos):
+	global recent_level;
+	recent_level += "Removed '" + data[pos-1]['name'] + "' (" + str(data[pos-1]['pos']) + ")";
+
 	counter = 0;
 	for x in data:
 		if (data[counter]['pos'] >= pos):
@@ -74,6 +86,9 @@ if (ans == "move"):
 
 with open('read_list/list.json', 'w') as write_file:
 	json.dump(data, write_file, indent=4)
+	
+with open('recent_change.txt', 'w') as recent:
+	recent.write('recent = `' + recent_level + '`');
 
 with open('list.json', 'w') as write_file:
 	write_file.write("listJSON = `")

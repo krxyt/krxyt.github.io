@@ -18,8 +18,10 @@
       </ul>
     </nav>
     <section><h1>The Official Quick Challenge List - Main</h1></section>
+    <section><h3 id="recent">h</h3></section>
       <hr/><div id="all-levels"></div>
       <script type="text/javascript" src="list.json"></script>
+      <script type="text/javascript" src="recent_change.txt"></script>
 
       <script>
 
@@ -52,6 +54,8 @@
           index++;
           }
         }
+
+        getHTML('recent').innerHTML = recent;
 
         append(JSON.parse(listJSON));
 
