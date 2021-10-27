@@ -1,1 +1,0 @@
-# krxyt.github.io
