@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>KrX's Page</title>
-  </head>
-  <body>
-    <h1>KrX's GitHub Page</h1>
-    <div>
-      <h>basically just a hub to change to my other sites</h><hr>
-    </div>
-
-    <nav>
-        <ul>
-          <li><a href="qcl/index.html">Quick Challenge List</a></li>
-          <li><a href="eval/index.html">Math Solver</a></li>
-        </ul>
-    </nav>
-
-  </body>
+    <body>
+        <h1 class="logo">Math Problem Solver</h1><hr>
+        <div>
+        <button onclick="solve()">Evaluate Problem</button>
+        <textarea type="text" id="math"></textarea>
+        </div>
+        <p id="solution">Solution: </p>
+    </body>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+    <!--create an ordered list-->
+    <style>
+        div {
+            display: flex;
+        }
+        .textarea {
+            width: 50%;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        #solution {
+            font-size: 20px;
+        }
+    </style>
 </html>
