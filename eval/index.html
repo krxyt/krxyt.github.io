@@ -2,10 +2,27 @@
 <html>
     <body>
         <h1 class="logo">Math Problem Solver</h1><hr>
+        <div>
         <button onclick="solve()">Evaluate Problem</button>
-        <input type="text" id="math">
+        <textarea type="text" id="math"></textarea>
+        </div>
         <p id="solution">Solution: </p>
     </body>
     <script src="script.js"></script>
     <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+    <style>
+        div {
+            display: flex;
+        }
+        .textarea {
+            width: 50%;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        #solution {
+            font-size: 20px;
+        }
+    </style>
 </html>

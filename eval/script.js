@@ -9,6 +9,7 @@ function solve() {
     try {
         if (problem.value == "") throw "You didn't enter a problem!";
         solution.textContent = `Solution: ${eval(problem.value)}`;
+        console.log(`Solution: ${eval(problem.value)}`);
     } catch (e) {
         console.log(e);
         solution.textContent = e;
