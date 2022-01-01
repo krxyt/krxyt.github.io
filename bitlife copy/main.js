@@ -16,10 +16,12 @@ function chance(percent) {
         return false;
 }
 
+var isOrphan = false;
+
 var hasSO = false;
 var isMarried = false;
 
-var gender = 0; // boy: 0; girl: 1
+var gender = "male"; // boy: 0; girl: 1
 var age = 0;
 var isDead = false;
 var year = rand(1900, 2020);
@@ -29,7 +31,7 @@ var marriedDate = dateAge + 7;
 var children = 0;
 
 var dadAge = rand(18, 79);
-var momAge = rand(18, 50);
+var momAge = rand(18, 79);
 
 var happy = rand(75, 100);
 var health = rand(80, 100);
@@ -41,8 +43,9 @@ var firstName = "";
 var friendFirst = "James";
 var friendLast = "Miller";
 
+var friendGend = "male";
+
 var friends = [];
-var kids = [{}];
 
 function getPerson() {
     var xhr = new XMLHttpRequest();
@@ -51,9 +54,10 @@ function getPerson() {
         var data = JSON.parse(this.response);
         friendFirst = data.results[0].name.first;
         friendLast = data.results[0].name.last;
+        friendGend = data.results[0].gender;
     }
     xhr.send();
-}
+} 
 
 function init() {
     age = 0;
@@ -63,7 +67,7 @@ function init() {
     marriedDate = dateAge + 7;
     kidsDate = marriedDate + rand(1, 5);
     dadAge = rand(18, 79);
-    momAge = rand(18, 50);
+    momAge = rand(18, 79);
     happy = rand(75, 100);
     health = rand(80, 100);
     smarts = rand(100);
@@ -74,7 +78,10 @@ function init() {
     getID("friends").innerHTML = "0";
 
     getID('feed').prepend(document.createElement('br'));
-    getID('feed').prepend("Age: " + age + "; Year: " + year + " - You were born.");
+    if (momAge >= 51)
+        getID('feed').prepend("Age: " + age + "; Year: " + year + " - You were adopted.");
+    else
+        getID('feed').prepend("Age: " + age + "; Year: " + year + " - You were born.");
 
     xhr = new XMLHttpRequest();
     xhr.open("GET", "https://randomuser.me/api/", true);
@@ -83,8 +90,7 @@ function init() {
         firstName = data.results[0].name.first;
         lastName = data.results[0].name.last;
         console.log(data);
-        if (data.results[0].gender == "male") gender = 0;
-        else gender = 1;
+        gender = data.results[0].gender;
         var location = data.results[0].location.city + ", " + data.results[0].location.country;
         getID("startText").innerHTML += firstName;
         getID("startText").innerHTML = "Your name is " + firstName + " " + lastName + ". You were born a " + (gender ? "girl" : "boy") + " during " + year + " in " + location + ". Your father is " + dadAge + " and your mother is " + momAge + ".";
@@ -164,6 +170,10 @@ function getCareer() {
 
 }
 
+var hasLicence = false;
+
+var SO = "";
+
 function feedMessage() {
     message = "";
     if (age == 5) {
@@ -178,12 +188,22 @@ function feedMessage() {
     if (age == 15) {
         message += "You have been hired for your first job. ";
     }
-    if (age == 16) {
+    if (age >= 16 && hasLicence == false) {
         if (chance(80)) {
             message += "You have successfully gotten your drivers license. ";
             if (chance(80)) {
-                message += "Your parents have gifted you a brand new car! ";
+                if (!isOrphan) {
+                    if (dadAge > 0 && momAge > 0)
+                        message += "Your parents have gifted you a brand new car! ";
+                    else if (dadAge > 0)
+                        message += "Your father has gifted you a brand new car! ";
+                    else if (momAge > 0)
+                        message += "Your mother has gifted you a brand new car! ";
+                }
+                else
+                    message += "You bought yourself a new car! ";
             }
+            hasLicence = true;
         }
         else message += "You didn't pass your driver's license test! ";
     }
@@ -195,28 +215,38 @@ function feedMessage() {
         happy += 25;
     }
     if (age >= dateAge && !isMarried && !hasSO) {
-        message += "You have gotten an attractive date. ";
+        function getSO() {
+            getPerson();
+            if (friendGend != gender) {
+                message += "You have started dating " + friendFirst + " " + friendLast + ". ";
+            }
+            else getSO();
+        }
+        getSO();
+        SO = friendFirst + " " + friendLast;
         happy += 50;
         hasSO = true;
     }
     if (hasSO && chance(10)) {
-        message += "You have broken up with your significant other. ";
+        message += "You have broken up with " + SO + ". ";
+        SO = "";
         happy -= 50;
         hasSO = false;
     }
     if (age > dateAge && hasSO && chance(10)) {
-        message += "You have gotten married! ";
+        message += "You have gotten married to " + SO + "! ";
         happy = 100;
         hasSO = false;
         isMarried = true;
     }
     if (isMarried && chance(2)) {
         message += "You have gotten divorced. ";
+        SO = "";
         happy -= 75;
         isMarried = false;
     }
-    if (age >= 25 && age <= 50) {
-        if (chance(15) && (hasSO == true || isMarried == true)) {
+    if (age >= 25 && hasRetired == false) {
+        if ((chance(2) && hasSO == true) || (chance(10) && isMarried == true)) {
             message += "You had a child. ";
             children++;
         }
@@ -244,6 +274,10 @@ function feedMessage() {
             message += "Your father has died from old age. ";
             happy = 0;
             dadAge = -Infinity;
+            if (momAge == -Infinity && age < 18) {
+                message += "You are now an orphan. ";
+                isOrphan = true;
+            }
         }
     }
     if (momAge >= 80) {
@@ -251,6 +285,10 @@ function feedMessage() {
             message += "Your mother has died from old age. ";
             happy = 0;
             momAge = -Infinity;
+            if (dadAge == -Infinity && age < 18) {
+                message += "You are now an orphan. ";
+                isOrphan = true;
+            }
         }
     }
     if (chance(75) && age <= 13) {
@@ -426,7 +464,20 @@ function reset() {
     friends = [];
     children = 0;
     isDead = false;
+    hasLicence = false;
+    isOrphan = false;
     init();
 }
 
 init();
+
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function(){
+    var div = this.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function(){ div.style.display = "none"; }, 600);
+  }
+}
