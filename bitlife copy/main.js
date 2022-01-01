@@ -93,7 +93,7 @@ function init() {
         gender = data.results[0].gender;
         var location = data.results[0].location.city + ", " + data.results[0].location.country;
         getID("startText").innerHTML += firstName;
-        getID("startText").innerHTML = "Your name is " + firstName + " " + lastName + ". You were born a " + (gender ? "girl" : "boy") + " during " + year + " in " + location + ". Your father is " + dadAge + " and your mother is " + momAge + ".";
+        getID("startText").innerHTML = "Your name is " + firstName + " " + lastName + ". You were born a " + gender + " during " + year + " in " + location + ". Your father is " + dadAge + " and your mother is " + momAge + ".";
     }
     xhr.send();
 }
@@ -215,12 +215,9 @@ function feedMessage() {
         happy += 25;
     }
     if (age >= dateAge && !isMarried && !hasSO) {
-        function getSO() {
+        const getSO = () => {
             getPerson();
-            if (friendGend != gender) {
-                message += "You have started dating " + friendFirst + " " + friendLast + ". ";
-            }
-            else getSO();
+            message += "You have started dating a " + friendGend + " named " + friendFirst + " " + friendLast + ". ";
         }
         getSO();
         SO = friendFirst + " " + friendLast;
@@ -259,7 +256,10 @@ function feedMessage() {
         else if (rand(3) == 3) {
             if (rand(2) == 1)
                 message += "You noticed a briefcase with money surrounding it, but didn't take any. ";
-            else message += "You noticed a breifcase with money surrounding it and took it. ";
+            else {
+                message += "You noticed a breifcase with money surrounding it and took it. ";
+                money += rand(100, 200);
+            }
         }
     }
     if (age >= 60 && age <= 70 && hasRetired == false) {
@@ -466,6 +466,10 @@ function reset() {
     isDead = false;
     hasLicence = false;
     isOrphan = false;
+    hasSO = false;
+    hasRetired = false;
+    SO = "";
+    
     init();
 }
 
