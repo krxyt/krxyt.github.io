@@ -1,0 +1,48 @@
+#bigText {
+    font-size: 150%;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 24px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+    /* center */
+    margin-bottom: 20px;
+    margin-top: 10px;
+    padding: 10px;
+    /* center text */
+    text-align: center;
+    /* border */
+    border: 2px solid #ccc;
+    /* decrease left and right margins */
+    margin-left: 20px;
+    margin-right: 20px;    
+
+    /* rounded corners */
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+
+}
+
+button {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    cursor: pointer;
+    /* top and bottom pad */
+    margin: 0.5em 0;
+    /* center */
+    text-align: center;
+    box-shadow: 5px 10px 20px 2px #a8a8a8;
+}
+
+/* make effect when button pressed */
+button:active {
+    /* push button down effect */
+    position: relative;
+
+}
